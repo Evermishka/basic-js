@@ -15,9 +15,35 @@ const { NotImplementedError } = require('../extensions/index.js');
  * => 'STRINGPLUS00PLUS00PLUS**STRINGPLUS00PLUS00PLUS**STRINGPLUS00PLUS00PLUS'
  *
  */
-function repeater(/* str, options */) {
-  throw new NotImplementedError('Not implemented');
-  // remove line with error and write your code here
+function repeater(str, options) {  
+  const repeatOptions = {
+    repeatTimes: (typeof options.repeatTimes == "undefined") ?  1 : options.repeatTimes,
+    separator: (typeof options.separator == "undefined") ?  '+' : options.separator,
+    addition: (typeof options.addition == "undefined") ?  '' : options.addition,
+    additionRepeatTimes: (typeof options.additionRepeatTimes == "undefined") ?  1 : options.additionRepeatTimes,
+    additionSeparator: (typeof options.additionSeparator == "undefined") ?  '|' : options.additionSeparator,
+  }
+
+  function makeString (str, counter, separator) {
+    const result = [];
+    if (Number.isInteger(counter)) {
+      for (let i = 0; i < counter; i++) {
+        result.push(str);
+      }
+      return result.join(separator);
+    } else {
+      return str;
+    }    
+  }
+
+  if (typeof str !== 'string') str = String(str);
+  if (typeof repeatOptions.addition !== 'string') repeatOptions.addition = String(repeatOptions.addition);  
+
+  const resultAddition = makeString (repeatOptions.addition, repeatOptions.additionRepeatTimes, repeatOptions.additionSeparator);
+  const resultRepeated = str + resultAddition;
+  const result = makeString (resultRepeated, repeatOptions.repeatTimes, repeatOptions.separator);
+
+  return result;
 }
 
 module.exports = {
